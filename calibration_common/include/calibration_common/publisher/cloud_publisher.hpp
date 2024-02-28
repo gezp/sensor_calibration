@@ -34,7 +34,7 @@ public:
     rclcpp::Node::SharedPtr node, std::string topic_name, size_t buffer_size, std::string frame_id);
   ~CloudPublisher() = default;
 
-  template <typename PointT>
+  template<typename PointT>
   void publish(const pcl::PointCloud<PointT> & cloud, rclcpp::Time time)
   {
     sensor_msgs::msg::PointCloud2 msg;
@@ -44,14 +44,14 @@ public:
     publisher_->publish(msg);
   }
 
-  template <typename PointT>
+  template<typename PointT>
   void publish(const pcl::PointCloud<PointT> & cloud, double time)
   {
     rclcpp::Time ros_time(static_cast<uint64_t>(time * 1e9));
     publish(cloud, ros_time);
   }
 
-  template <typename PointT>
+  template<typename PointT>
   void publish(const pcl::PointCloud<PointT> & cloud)
   {
     publish(cloud, node_->get_clock()->now());

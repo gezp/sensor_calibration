@@ -3,7 +3,7 @@ Language: Cpp
 BasedOnStyle: Google
 
 AccessModifierOffset: -2
-AlignAfterOpenBracket: AlwaysBreak
+AlignOperands: true
 BraceWrapping:
   AfterClass: true
   AfterFunction: true
@@ -18,3 +18,4 @@ PointerAlignment: Middle
 ReflowComments: false
 SortIncludes: Never
 AllowShortFunctionsOnASingleLine: InlineOnly
+AllowShortLambdasOnASingleLine: All

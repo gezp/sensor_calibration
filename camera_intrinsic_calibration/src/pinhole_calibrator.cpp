@@ -43,7 +43,7 @@ bool PinholeCalibrator::process_image(const cv::Mat & image)
   std::vector<cv::Point2f> image_corners;
   if (!cv::findChessboardCorners(gray_image, corner_size_, image_corners)) {
     status_message_ = "[collect data] failed to find chessborad corners, total image:" +
-                      std::to_string(total_img_num_);
+      std::to_string(total_img_num_);
     return false;
   }
   cv::TermCriteria criteria(cv::TermCriteria::EPS | cv::TermCriteria::EPS, 50, 0.001);
@@ -60,7 +60,7 @@ bool PinholeCalibrator::process_image(const cv::Mat & image)
   debug_image_ = image;
   cv::drawChessboardCorners(debug_image_, corner_size_, image_corners, true);
   status_message_ = "[collect data] total image:" + std::to_string(total_img_num_) +
-                    ", valid image:" + std::to_string(valid_img_num_) + ".";
+    ", valid image:" + std::to_string(valid_img_num_) + ".";
   return true;
 }
 
@@ -81,7 +81,7 @@ bool PinholeCalibrator::optimize()
     object_points_, image_points_, image_size_, camera_intrinsic_, camera_distortion_,
     board_rotations_, board_translations_);
   status_message_ = "[optimize] successed to optimize, image:" + std::to_string(valid_img_num_) +
-                    ", RMS re-projection error:" + std::to_string(rms);
+    ", RMS re-projection error:" + std::to_string(rms);
   calibreted_ = true;
   return true;
 }

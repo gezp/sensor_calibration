@@ -29,30 +29,30 @@ ImageSubscriber::ImageSubscriber(
   enable_compressed_ = enable_compressed;
   if (enable_compressed) {
     auto msg_callback = [this](const sensor_msgs::msg::CompressedImage::SharedPtr msg) {
-      MsgData data;
-      data.time = rclcpp::Time(msg->header.stamp).seconds();
-      data.image = cv_bridge::toCvCopy(*msg)->image;
-      buffer_mutex_.lock();
-      buffer_.push_back(data);
-      if (buffer_.size() > buffer_size_) {
-        buffer_.pop_front();
-      }
-      buffer_mutex_.unlock();
-    };
+        MsgData data;
+        data.time = rclcpp::Time(msg->header.stamp).seconds();
+        data.image = cv_bridge::toCvCopy(*msg)->image;
+        buffer_mutex_.lock();
+        buffer_.push_back(data);
+        if (buffer_.size() > buffer_size_) {
+          buffer_.pop_front();
+        }
+        buffer_mutex_.unlock();
+      };
     compressed_subscriber_ = node_->create_subscription<sensor_msgs::msg::CompressedImage>(
       topic_name, buffer_size, msg_callback);
   } else {
     auto msg_callback = [this](const sensor_msgs::msg::Image::SharedPtr msg) {
-      MsgData data;
-      data.time = rclcpp::Time(msg->header.stamp).seconds();
-      data.image = cv_bridge::toCvCopy(*msg)->image;
-      buffer_mutex_.lock();
-      buffer_.push_back(data);
-      if (buffer_.size() > buffer_size_) {
-        buffer_.pop_front();
-      }
-      buffer_mutex_.unlock();
-    };
+        MsgData data;
+        data.time = rclcpp::Time(msg->header.stamp).seconds();
+        data.image = cv_bridge::toCvCopy(*msg)->image;
+        buffer_mutex_.lock();
+        buffer_.push_back(data);
+        if (buffer_.size() > buffer_size_) {
+          buffer_.pop_front();
+        }
+        buffer_mutex_.unlock();
+      };
     subscriber_ =
       node_->create_subscription<sensor_msgs::msg::Image>(topic_name, buffer_size, msg_callback);
   }

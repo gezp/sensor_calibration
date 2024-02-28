@@ -76,19 +76,21 @@ CalibrationNode::CalibrationNode(const rclcpp::NodeOptions & options)
   }
   // status timer
   using namespace std::chrono_literals;
-  timer_ = node_->create_wall_timer(100ms, [this]() {
-    std::lock_guard<std::mutex> lock(status_mutex_);
-    status_pub_->publish(status_msg_);
-  });
+  timer_ = node_->create_wall_timer(
+    100ms, [this]() {
+      std::lock_guard<std::mutex> lock(status_mutex_);
+      status_pub_->publish(status_msg_);
+    });
   // thread
-  run_thread_ = std::make_unique<std::thread>([this]() {
-    while (!exit_) {
-      if (!run()) {
-        using namespace std::chrono_literals;
-        std::this_thread::sleep_for(50ms);
+  run_thread_ = std::make_unique<std::thread>(
+    [this]() {
+      while (!exit_) {
+        if (!run()) {
+          using namespace std::chrono_literals;
+          std::this_thread::sleep_for(50ms);
+        }
       }
-    }
-  });
+    });
 }
 
 CalibrationNode::~CalibrationNode()

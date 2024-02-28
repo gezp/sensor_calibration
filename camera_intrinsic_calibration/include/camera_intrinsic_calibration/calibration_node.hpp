@@ -17,6 +17,7 @@
 #include <thread>
 #include <memory>
 #include <string>
+#include <deque>
 
 #include "rclcpp/rclcpp.hpp"
 #include "calibration_common/publisher/image_publisher.hpp"
