@@ -236,7 +236,7 @@ class CalibrationClient(QWidget):
         self.initialized = False
 
     def send_command(self, cmd):
-        if self.cmd_pub == None:
+        if self.cmd_pub is None:
             return
         msg = CalibrationCommand()
         msg.command = cmd
