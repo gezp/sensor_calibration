@@ -14,14 +14,11 @@
 
 import os
 
-from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess
 from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    pkg_calibration_common = get_package_share_directory("calibration_common")
     data_dir = os.path.join(
         os.environ["HOME"], "calibration_data", "SensorsCalibration"
     )

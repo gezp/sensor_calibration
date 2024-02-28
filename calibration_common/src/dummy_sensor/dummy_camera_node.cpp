@@ -49,15 +49,15 @@ DummyCameraNode::DummyCameraNode(const rclcpp::NodeOptions & options)
   // create timer
   auto period_ms = std::chrono::milliseconds(static_cast<int64_t>(1000.0 / rate_));
   auto timer_callback = [this]() {
-    if (loop_ && current_idx_ == images_.size()) {
-      current_idx_ = 0;
-    }
-    if (current_idx_ < images_.size()) {
-      double t = timestamp_ + current_idx_ * 1000.0 / rate_;
-      image_pub_->publish(images_[current_idx_], t);
-      current_idx_++;
-    }
-  };
+      if (loop_ && current_idx_ == images_.size()) {
+        current_idx_ = 0;
+      }
+      if (current_idx_ < images_.size()) {
+        double t = timestamp_ + current_idx_ * 1000.0 / rate_;
+        image_pub_->publish(images_[current_idx_], t);
+        current_idx_++;
+      }
+    };
   timer_ = node_->create_wall_timer(period_ms, timer_callback);
 }
 

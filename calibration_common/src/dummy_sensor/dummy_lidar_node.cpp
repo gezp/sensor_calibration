@@ -48,18 +48,18 @@ DummyLidarNode::DummyLidarNode(const rclcpp::NodeOptions & options)
   // create timer
   auto period_ms = std::chrono::milliseconds(static_cast<int64_t>(1000.0 / rate_));
   auto timer_callback = [this]() {
-    if (pointclouds_.empty()) {
-      return;
-    }
-    if (loop_ && current_idx_ == pointclouds_.size()) {
-      current_idx_ = 0;
-    }
-    if (current_idx_ < pointclouds_.size()) {
-      double t = timestamp_ + current_idx_ * 1000.0 / rate_;
-      cloud_pub_->publish(*pointclouds_[current_idx_], t);
-      current_idx_++;
-    }
-  };
+      if (pointclouds_.empty()) {
+        return;
+      }
+      if (loop_ && current_idx_ == pointclouds_.size()) {
+        current_idx_ = 0;
+      }
+      if (current_idx_ < pointclouds_.size()) {
+        double t = timestamp_ + current_idx_ * 1000.0 / rate_;
+        cloud_pub_->publish(*pointclouds_[current_idx_], t);
+        current_idx_++;
+      }
+    };
   timer_ = node_->create_wall_timer(period_ms, timer_callback);
 }
 
@@ -72,7 +72,7 @@ bool DummyLidarNode::read_data()
   std::vector<std::string> filepaths;
   for (const auto & entry : std::filesystem::directory_iterator(data_dir_)) {
     if (entry.is_regular_file() && entry.path().extension() == ".pcd") {
-      //std::cout << entry.path() << std::endl; // 输出jpg文件路径
+      // std::cout << entry.path() << std::endl; // 输出jpg文件路径
       filepaths.push_back(entry.path().string());
     }
   }
