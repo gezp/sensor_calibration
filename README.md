@@ -7,6 +7,10 @@
 * 传感器内参标定（sensor_intrinsics）
 * 传感器到传感器之间的外参标定（sensor2sensor）
 
+标定文件的存储形式：
+
+* 采用YAML文件，数据格式详见[Calibration File Format](doc/calibration_file_format.md)文档
+
 ## Quick start
 
 环境要求
