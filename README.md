@@ -1,5 +1,7 @@
 # sensor_calibration
 
+[![Build and Test](https://github.com/gezp/sensor_calibration/actions/workflows/ci.yml/badge.svg?branch=humble)](https://github.com/gezp/sensor_calibration/actions/workflows/ci.yml)
+
 该项目基于ROS2平台实现了部分传感器标定功能，主要以学习为目的，面向初学者学习入门，因此代码侧重于可读性，及扩展性，尽可能将代码进行解耦，并遵循ROS2的项目规范，以及代码风格。
 
 本项目主要面向以下场景的传感器标定：
@@ -15,7 +17,7 @@
 
 环境要求
 
-- ROS版本: `Humble`
+* ROS版本: `Humble`
 
 下载源码及安装依赖
 
@@ -53,5 +55,6 @@ sensor2sensor外参标定
 
 本项目参考了许多其它类似项目，并参考并引用了部分代码，这里向以下项目的作者表示感谢！
 
-- https://github.com/PJLab-ADG/SensorsCalibration
-- https://github.com/tier4/CalibrationTools
+* https://github.com/PJLab-ADG/SensorsCalibration
+* https://github.com/tier4/CalibrationTools
+* https://github.com/ethz-asl/kalibr
