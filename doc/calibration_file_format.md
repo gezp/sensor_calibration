@@ -13,14 +13,14 @@ camera1:
     intrinsics: [461.629, 460.152, 362.680, 246.049]
     distortion_coeffs: [-0.27695497, 0.06712482, 0.00087538, 0.00011556, 0.0]
 sensor_pair_transforms:
-	transform1:
-	    frame_id: camera1
-	    child_frame_id: lidar1
+    transform1:
+        frame_id: camera1
+        child_frame_id: lidar1
         translation: [0.07008565, -0.01771023, 0.00399246]
         rotation: [0.0 ,0.0 ,0.0 ,1.0] # x,y,z,w
-	transform2:
-	    frame_id: lidar1
-	    child_frame_id: lidar2
+    transform2:
+        frame_id: lidar1
+        child_frame_id: lidar2
         translation: [0.07008565, -0.01771023, 0.00399246]
         rotation: [0.0 ,0.0 ,0.0 ,1.0] # x,y,z,w
 ```
@@ -34,10 +34,10 @@ sensor_pair_transforms:
 * translation：外参坐标变换中的平移部分
 * rotation：外参坐标变换中的旋转部分，采用四元数表示，顺序为`[x,y,z,w]`
 
-这里标定出的坐标变换表示为$T_{frame\_id-child\_frame\_id}$，等价以下两种说法：
+这里标定出的坐标变换表示为 $T_\text{frame id - child frame id}$，等价以下两种说法：
 
-* 在$frame\_id$传感器坐标系下，$child\_frame\_id$的位姿。
-* $child\_frame\_id$坐标系到$frame\_id$坐标系下的位姿变换。
+* 在`frame_id`传感器坐标系下，`child_frame_id`的位姿。
+* `child_frame_id`坐标系到`frame_id`坐标系下的位姿变换。
 
 ## 相机内参说明
 
