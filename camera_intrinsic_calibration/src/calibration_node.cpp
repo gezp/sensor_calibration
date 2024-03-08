@@ -64,6 +64,7 @@ CalibrationNode::CalibrationNode(const rclcpp::NodeOptions & options)
   // calibrator
   YAML::Node config_node = YAML::LoadFile(calibrator_config);
   calibrator_ = std::make_shared<PinholeCalibrator>(config_node["pinhole_calibrator"]);
+  calibration_data_ = std::make_shared<calibration_common::CalibrationData>();
   // initialize status
   status_msg_.frame_id = frame_id_;
   status_msg_.sensor_topic = image_sub_->get_topic_name();
@@ -166,17 +167,17 @@ void CalibrationNode::save_result()
     RCLCPP_FATAL(node_->get_logger(), "failed to save result, no output_file");
     return;
   }
-  YAML::Node config;
   if (std::filesystem::exists(output_file_)) {
-    config = YAML::LoadFile(output_file_);
+    calibration_data_->load(output_file_);
   }
-  config[frame_id_]["camera_model"] = calibrator_->get_camera_model();
-  config[frame_id_]["intrinsics"] = calibrator_->get_intrinsics();
-  config[frame_id_]["distortion_coeffs"] = calibrator_->get_distortion_coeffs();
-  std::ofstream fout(output_file_);
-  fout << config << std::endl;
-  RCLCPP_INFO(
-    node_->get_logger(), "successed to save calibration result: %s", output_file_.c_str());
+  calibration_data_->add_camera_intrinsic_data(
+    frame_id_, calibrator_->get_camera_model(), calibrator_->get_intrinsics(),
+    calibrator_->get_distortion_coeffs());
+  if (calibration_data_->save(output_file_)) {
+    RCLCPP_INFO(node_->get_logger(), "successed to save result: %s", output_file_.c_str());
+  } else {
+    RCLCPP_INFO(node_->get_logger(), "failed to save result: %s", output_file_.c_str());
+  }
 }
 
 bool CalibrationNode::run()
