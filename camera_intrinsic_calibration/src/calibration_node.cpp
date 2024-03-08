@@ -168,7 +168,12 @@ void CalibrationNode::save_result()
     return;
   }
   if (std::filesystem::exists(output_file_)) {
-    calibration_data_->load(output_file_);
+    if (!calibration_data_->load(output_file_)) {
+      RCLCPP_FATAL(
+        node_->get_logger(), "failed to load existed calibration data, %s",
+        calibration_data_->error_message().c_str());
+      return;
+    }
   }
   calibration_data_->add_camera_intrinsic_data(
     frame_id_, calibrator_->get_camera_model(), calibrator_->get_intrinsics(),

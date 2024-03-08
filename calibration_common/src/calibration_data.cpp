@@ -104,7 +104,7 @@ void CalibrationData::remove_extrinsic_data(
 bool CalibrationData::save(const std::string & file)
 {
   std::ofstream ofs;
-  ofs.open(file, std::ios::app);
+  ofs.open(file);
   if (!ofs) {
     return false;
   }
@@ -150,29 +150,48 @@ bool CalibrationData::load(const std::string & file)
   auto cameras = config["cameras"];
   if (cameras.IsDefined() && cameras.IsMap()) {
     for (auto it = cameras.begin(); it != cameras.end(); ++it) {
-      YAML::Node camera = it->second;
-      auto frame_id = camera["frame_id"].as<std::string>();
-      auto camera_model_type = camera["camera_model_type"].as<std::string>();
-      auto intrinsics = camera["intrinsics"].as<std::vector<double>>();
-      auto distortion_coeffs = camera["distortion_coeffs"].as<std::vector<double>>();
-      add_camera_intrinsic_data(frame_id, camera_model_type, intrinsics, distortion_coeffs);
+      std::string key = "unknown";
+      try {
+        key = it->first.as<std::string>();
+        YAML::Node camera = it->second;
+        auto frame_id = camera["frame_id"].as<std::string>();
+        auto camera_model_type = camera["camera_model_type"].as<std::string>();
+        auto intrinsics = camera["intrinsics"].as<std::vector<double>>();
+        auto distortion_coeffs = camera["distortion_coeffs"].as<std::vector<double>>();
+        add_camera_intrinsic_data(frame_id, camera_model_type, intrinsics, distortion_coeffs);
+      } catch (std::exception & e) {
+        error_message_ = std::string("invalid camera data [") + key + "]";
+        return false;
+      }
     }
   }
   auto sensor_pair_transforms = config["sensor_pair_transforms"];
   if (sensor_pair_transforms.IsDefined() && sensor_pair_transforms.IsMap()) {
     for (auto it = sensor_pair_transforms.begin(); it != sensor_pair_transforms.end(); ++it) {
-      YAML::Node sensor_pair_transform = it->second;
-      auto frame_id = sensor_pair_transform["frame_id"].as<std::string>();
-      auto child_frame_id = sensor_pair_transform["child_frame_id"].as<std::string>();
-      auto t = sensor_pair_transform["translation"].as<std::vector<double>>();
-      auto r = sensor_pair_transform["rotation"].as<std::vector<double>>();
-      Eigen::Matrix4d transform = Eigen::Matrix4d::Identity();
-      transform.block<3, 1>(0, 3) = Eigen::Vector3d(t[0], t[1], t[2]);
-      transform.block<3, 3>(0, 0) = Eigen::Quaterniond(r[3], r[0], r[1], r[2]).toRotationMatrix();
-      add_extrinsic_data(frame_id, child_frame_id, transform);
+      std::string key = "unknown";
+      try {
+        key = it->first.as<std::string>();
+        YAML::Node sensor_pair_transform = it->second;
+        auto frame_id = sensor_pair_transform["frame_id"].as<std::string>();
+        auto child_frame_id = sensor_pair_transform["child_frame_id"].as<std::string>();
+        auto t = sensor_pair_transform["translation"].as<std::vector<double>>();
+        auto r = sensor_pair_transform["rotation"].as<std::vector<double>>();
+        Eigen::Matrix4d transform = Eigen::Matrix4d::Identity();
+        transform.block<3, 1>(0, 3) = Eigen::Vector3d(t[0], t[1], t[2]);
+        transform.block<3, 3>(0, 0) = Eigen::Quaterniond(r[3], r[0], r[1], r[2]).toRotationMatrix();
+        add_extrinsic_data(frame_id, child_frame_id, transform);
+      } catch (std::exception & e) {
+        error_message_ = std::string("invalid sensor_pair_transform [") + key + "]";
+        return false;
+      }
     }
   }
   return true;
+}
+
+std::string CalibrationData::error_message()
+{
+  return error_message_;
 }
 
 }  // namespace calibration_common

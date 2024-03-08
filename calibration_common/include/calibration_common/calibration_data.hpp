@@ -58,10 +58,13 @@ public:
   // save & load
   bool save(const std::string & file);
   bool load(const std::string & file);
+  //
+  std::string error_message();
 
 private:
   std::map<std::string, CameraIntrinsicData> camera_intrinsic_data_;
   std::map<SensorFrameIdPair, Eigen::Matrix4d> extrinsic_data_;
+  std::string error_message_;
 };
 
 }  // namespace calibration_common
