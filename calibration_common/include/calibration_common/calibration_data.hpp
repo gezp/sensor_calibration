@@ -40,11 +40,9 @@ public:
   // for camera intrinsic data
   bool add_camera_intrinsic_data(
     const std::string & frame_id, const std::string & camera_model_type,
-    const std::vector<double> & intrinsics,
-    const std::vector<double> & distortion_coeffs);
+    const std::vector<double> & intrinsics, const std::vector<double> & distortion_coeffs);
   bool get_camera_intrinsic_data(
-    const std::string & frame_id, std::string & camera_model_type,
-    std::vector<double> & intrinsics,
+    const std::string & frame_id, std::string & camera_model_type, std::vector<double> & intrinsics,
     std::vector<double> & distortion_coeffs);
   void remove_camera_intrinsic_data(const std::string & frame_id);
   // for sensor extrinsic data
@@ -52,8 +50,7 @@ public:
     const std::string & frame_id, const std::string & child_frame_id,
     const Eigen::Matrix4d & transform);
   bool get_extrinsic_data(
-    const std::string & frame_id, const std::string & child_frame_id,
-    Eigen::Matrix4d & transform);
+    const std::string & frame_id, const std::string & child_frame_id, Eigen::Matrix4d & transform);
   void remove_extrinsic_data(const std::string & frame_id, const std::string & child_frame_id);
   // save & load
   bool save(const std::string & file);

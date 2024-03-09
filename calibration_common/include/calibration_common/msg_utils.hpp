@@ -26,5 +26,4 @@ rclcpp::Time to_ros_time(double time);
 
 geometry_msgs::msg::Transform to_transform_msg(Eigen::Matrix4d pose);
 
-
 }  // namespace calibration_common
