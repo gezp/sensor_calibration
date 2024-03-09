@@ -22,6 +22,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "calibration_common/publisher/image_publisher.hpp"
 #include "calibration_common/subscriber/image_subscriber.hpp"
+#include "calibration_common/calibration_data.hpp"
 #include "camera_intrinsic_calibration/pinhole_calibrator.hpp"
 #include "calibration_interfaces/msg/calibration_status.hpp"
 #include "calibration_interfaces/msg/calibration_command.hpp"
@@ -71,6 +72,7 @@ private:
   bool exit_{false};
   // data
   std::deque<SensorData> sensor_data_buffer_;
+  std::shared_ptr<calibration_common::CalibrationData> calibration_data_;
   uint8_t state_;
   bool is_auto_mode_{true};
   bool need_collect_once_{false};
