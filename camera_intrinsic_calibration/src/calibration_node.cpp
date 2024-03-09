@@ -176,7 +176,7 @@ void CalibrationNode::save_result()
     }
   }
   calibration_data_->add_camera_intrinsic_data(
-    frame_id_, calibrator_->get_camera_model(), calibrator_->get_intrinsics(),
+    frame_id_, calibrator_->get_camera_model_type(), calibrator_->get_intrinsics(),
     calibrator_->get_distortion_coeffs());
   if (calibration_data_->save(output_file_)) {
     RCLCPP_INFO(node_->get_logger(), "successed to save result: %s", output_file_.c_str());
