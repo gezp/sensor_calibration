@@ -1,12 +1,15 @@
-# header
-std_msgs/Header header
+# timestamp
+builtin_interfaces/Time timestamp
+
+# frame id
+string frame_id
 
 # camera resolution
 uint32 height
 uint32 width
 
-# camera_model
-string camera_model
+# camera_model_type
+string camera_model_type
 
 # intrinsics
 float32[] intrinsics

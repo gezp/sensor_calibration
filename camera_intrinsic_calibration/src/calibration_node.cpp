@@ -68,7 +68,7 @@ CalibrationNode::CalibrationNode(const rclcpp::NodeOptions & options)
   // initialize status
   status_msg_.frame_id = frame_id_;
   status_msg_.sensor_topic = image_sub_->get_topic_name();
-  status_msg_.calibration_type = "camera_intrinsic";
+  status_msg_.calibration_type = "camera_intrinsic_calibration";
   status_msg_.command_topic = command_topic;
   if (autostart_) {
     process_command(calibration_interfaces::msg::CalibrationCommand::START);
@@ -134,11 +134,14 @@ void CalibrationNode::process_command(uint8_t command)
     clear_data();
     update_status_msg(state_, "start to collect data.");
   } else if (command == calibration_interfaces::msg::CalibrationCommand::SAVE_RESULT) {
-    if (state_ != calibration_interfaces::msg::CalibrationStatus::SUCCESSED) {
-      RCLCPP_FATAL(node_->get_logger(), "failed to save result, no valid result");
+    if (state_ == calibration_interfaces::msg::CalibrationStatus::DONE && success_) {
+      save_result();
+    } else {
+      RCLCPP_FATAL(
+        node_->get_logger(),
+        "failed to save result, need be state DONE and calibrated successfully!");
       return;
     }
-    save_result();
   } else if (command == calibration_interfaces::msg::CalibrationCommand::COLLECT_ONCE) {
     is_auto_mode_ = false;
     state_ = calibration_interfaces::msg::CalibrationStatus::COLLECTING;
@@ -153,11 +156,12 @@ void CalibrationNode::process_command(uint8_t command)
   }
 }
 
-void CalibrationNode::update_status_msg(uint8_t state, const std::string & info)
+void CalibrationNode::update_status_msg(uint8_t state, const std::string & info, bool success)
 {
   std::lock_guard<std::mutex> lock(status_mutex_);
   status_msg_.timestamp = node_->get_clock()->now();
   status_msg_.state = state;
+  status_msg_.success = success;
   status_msg_.info = info;
 }
 
@@ -218,12 +222,9 @@ bool CalibrationNode::run()
   } else if (state_ == calibration_interfaces::msg::CalibrationStatus::OPTIMIZING) {
     if (is_auto_mode_ || need_optimize_once_) {
       update_status_msg(state_, "start to optimize.");
-      if (calibrator_->optimize()) {
-        state_ = calibration_interfaces::msg::CalibrationStatus::SUCCESSED;
-      } else {
-        state_ = calibration_interfaces::msg::CalibrationStatus::FAILED;
-      }
-      update_status_msg(state_, calibrator_->get_status_message());
+      success_ = calibrator_->optimize();
+      state_ = calibration_interfaces::msg::CalibrationStatus::DONE;
+      update_status_msg(state_, calibrator_->get_status_message(), success_);
       need_optimize_once_ = false;
     }
   } else {

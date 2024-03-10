@@ -200,7 +200,7 @@ class CalibrationClient(QWidget):
         self.recv_calibration_status.emit(msg)
 
     def update_calibration_status(self, msg: CalibrationStatus):
-        self.update_calibration_state(msg.state)
+        self.update_calibration_state(msg)
         self.status_info_browser.setText(msg.info)
         if not self.initialized:
             self.initialize_calibration_status(msg)
@@ -216,7 +216,7 @@ class CalibrationClient(QWidget):
         for btn in self.btn_commands:
             btn.setEnabled(True)
         self.initialized = True
-        if msg.calibration_type != "camera_intrinsic":
+        if msg.calibration_type != "camera_intrinsic_calibration":
             return
         # debug image
         debug_topic = "/calibration/camera_intrinsic/" + msg.frame_id + "/debug_image"
@@ -242,19 +242,20 @@ class CalibrationClient(QWidget):
         msg.command = cmd
         self.cmd_pub.publish(msg)
 
-    def update_calibration_state(self, state):
-        if state == CalibrationStatus.UNKNOWN:
+    def update_calibration_state(self, msg: CalibrationStatus):
+        if msg.state == CalibrationStatus.UNKNOWN:
             self.label_calibration_status.setText("unknown")
-        elif state == CalibrationStatus.READY:
+        elif msg.state == CalibrationStatus.READY:
             self.label_calibration_status.setText("ready")
-        elif state == CalibrationStatus.COLLECTING:
+        elif msg.state == CalibrationStatus.COLLECTING:
             self.label_calibration_status.setText("collecting")
-        elif state == CalibrationStatus.OPTIMIZING:
+        elif msg.state == CalibrationStatus.OPTIMIZING:
             self.label_calibration_status.setText("optimizing")
-        elif state == CalibrationStatus.SUCCESSED:
-            self.label_calibration_status.setText("successed")
-        elif state == CalibrationStatus.FAILED:
-            self.label_calibration_status.setText("failed")
+        elif msg.state == CalibrationStatus.DONE:
+            if msg.success:
+                self.label_calibration_status.setText("done[successed]")
+            else:
+                self.label_calibration_status.setText("done[failed]")
         else:
             self.label_calibration_status.setText("undefined")
 
