@@ -68,7 +68,7 @@ CalibrationNode::CalibrationNode(const rclcpp::NodeOptions & options)
   // initialize status
   status_msg_.frame_id = frame_id_;
   status_msg_.sensor_topic = image_sub_->get_topic_name();
-  status_msg_.calibration_type = "camera_intrinsic";
+  status_msg_.calibration_type = "camera_intrinsic_calibration";
   status_msg_.command_topic = command_topic;
   if (autostart_) {
     process_command(calibration_interfaces::msg::CalibrationCommand::START);

@@ -216,7 +216,7 @@ class CalibrationClient(QWidget):
         for btn in self.btn_commands:
             btn.setEnabled(True)
         self.initialized = True
-        if msg.calibration_type != "camera_intrinsic":
+        if msg.calibration_type != "camera_intrinsic_calibration":
             return
         # debug image
         debug_topic = "/calibration/camera_intrinsic/" + msg.frame_id + "/debug_image"
