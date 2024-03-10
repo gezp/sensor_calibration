@@ -50,7 +50,7 @@ private:
   void read_data();
   void clear_data();
   void process_command(uint8_t command);
-  void update_status_msg(uint8_t state, const std::string & info);
+  void update_status_msg(uint8_t state, const std::string & info, bool success = false);
   void save_result();
   bool run();
 
@@ -74,6 +74,7 @@ private:
   std::deque<SensorData> sensor_data_buffer_;
   std::shared_ptr<calibration_common::CalibrationData> calibration_data_;
   uint8_t state_;
+  bool success_{false};
   bool is_auto_mode_{true};
   bool need_collect_once_{false};
   bool need_optimize_once_{false};

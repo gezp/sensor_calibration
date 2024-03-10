@@ -1,11 +1,12 @@
-# header
-std_msgs/Header header
+# timestamp
+builtin_interfaces/Time timestamp
 
-# child frame
+# frame id
+string frame_id
 string child_frame_id
 
-# initial_transform
+# initial transform
 geometry_msgs/Transform initial_transform
 
 # calibrated transform
-geometry_msgs/Transform finnal_transform
+geometry_msgs/Transform final_transform

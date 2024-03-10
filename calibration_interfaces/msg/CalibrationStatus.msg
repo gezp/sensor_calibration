@@ -19,11 +19,14 @@ uint8 UNKNOWN = 0
 uint8 READY = 1
 uint8 COLLECTING = 2
 uint8 OPTIMIZING = 3
-uint8 SUCCESSED = 4
-uint8 FAILED = 5
+uint8 CALIBRATED = 4
+uint8 DONE = 5
 
-# state
+# calibration state
 uint8 state 0
 
-# status info
+# calibration result
+bool success false
+
+# calibration info
 string info
